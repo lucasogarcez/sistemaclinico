@@ -149,11 +149,12 @@ sistema-clinico/
 │   │   ├── java/
 │   │   │   └── com/
 │   │   │       └── sistemaclinico/
-│   │   │           ├── controller/
-│   │   │           ├── service/
-│   │   │           ├── repository/
-│   │   │           ├── model/
-│   │   │           └── config/
+│   │   │           └── clinico/
+│   │   │               ├── controller/
+│   │   │               ├── service/
+│   │   │               ├── repository/
+│   │   │               ├── model/
+│   │   │               └── config/
 │   │   └── resources/
 │   │       ├── templates/        # Views Thymeleaf
 │   │       ├── static/           # CSS, JS e imagens
