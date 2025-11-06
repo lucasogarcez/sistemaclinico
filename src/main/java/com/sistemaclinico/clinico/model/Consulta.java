@@ -1,4 +1,4 @@
-package com.hospital.hospital_web.model;
+package com.sistemaclinico.clinico.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

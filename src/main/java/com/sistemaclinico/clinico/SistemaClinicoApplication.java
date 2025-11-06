@@ -1,13 +1,13 @@
-package com.hospital.hospital_web;
+package com.sistemaclinico.clinico;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HospitalWebApplication {
+public class SistemaClinicoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HospitalWebApplication.class, args);
+		SpringApplication.run(SistemaClinicoApplication.class, args);
 	}
 
 }

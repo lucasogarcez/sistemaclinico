@@ -1,4 +1,4 @@
-package com.hospital.hospital_web.model;
+package com.sistemaclinico.clinico.model;
 
 public class Usuario {
     private Integer id;

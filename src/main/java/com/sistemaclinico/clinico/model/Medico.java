@@ -1,24 +1,24 @@
-package com.hospital.hospital_web.model;
+package com.sistemaclinico.clinico.model;
 
-import java.time.LocalDate;
 import java.util.List;
 
-public class Paciente {
+public class Medico {
     private Integer id;
     private String nome;
-    private String cpf;
-    private LocalDate dataNascimento;
+    private String crm;
+
+    private Usuario usuario;
 
     private List<Consulta> consultas;
 
-    public Paciente() {
+    public Medico() {
     }
 
-    public Paciente(Integer id, String nome, String cpf, LocalDate dataNascimento) {
+    public Medico(Integer id, String nome, String crm, Usuario usuario) {
         this.id = id;
         this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
+        this.crm = crm;
+        this.usuario = usuario;
     }
 
     public Integer getId() {
@@ -37,20 +37,20 @@ public class Paciente {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getCrm() {
+        return crm;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCrm(String crm) {
+        this.crm = crm;
     }
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public List<Consulta> getConsultas() {
