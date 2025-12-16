@@ -3,6 +3,8 @@ package com.sistemaclinico.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.sistemaclinico.model.enums.StatusPessoa;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,7 +30,7 @@ public class Medico implements Serializable {
 	@NotBlank(message = "A CRM do médico é obrigatório")
 	private String crm;
 	@Enumerated(EnumType.STRING)
-	private Status status = Status.ATIVO;
+	private StatusPessoa status = StatusPessoa.ATIVO;
 	private List<Consulta> consultas;
 
 	public Long getCodigo() {
@@ -55,11 +57,11 @@ public class Medico implements Serializable {
 		this.crm = crm;
 	}
 
-	public Status getStatus() {
+	public StatusPessoa getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(StatusPessoa status) {
 		this.status = status;
 	}
 

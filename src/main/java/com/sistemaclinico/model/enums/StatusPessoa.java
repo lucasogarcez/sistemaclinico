@@ -1,13 +1,13 @@
-package com.sistemaclinico.model;
+package com.sistemaclinico.model.enums;
 
-public enum Status {
+public enum StatusPessoa {
 
 	ATIVO("ativo"),
 	INATIVO("inativo");
 	
 	private String descricao;
 	
-	private Status(String descricao) {
+	private StatusPessoa(String descricao) {
 		this.descricao = descricao;
 	}
 	

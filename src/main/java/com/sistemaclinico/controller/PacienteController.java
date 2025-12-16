@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import com.sistemaclinico.filter.PacienteFilter;
 import com.sistemaclinico.model.Paciente;
-import com.sistemaclinico.model.Status;
+import com.sistemaclinico.model.enums.StatusPessoa;
 import com.sistemaclinico.notification.NotificacaoSweetAlert2;
 import com.sistemaclinico.notification.TipoNotificaoSweetAlert2;
 import com.sistemaclinico.pagination.PageWrapper;
@@ -132,7 +132,7 @@ public class PacienteController {
         Optional<Paciente> pacienteOptional = repository.findById(codigo);
         if (pacienteOptional.isPresent()) {
             Paciente paciente = pacienteOptional.get();
-            paciente.setStatus(Status.INATIVO);
+            paciente.setStatus(StatusPessoa.INATIVO);
             service.alterar(paciente);
             atributos.addFlashAttribute("notificacao", 
                 new NotificacaoSweetAlert2("Paciente removido com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000)); 

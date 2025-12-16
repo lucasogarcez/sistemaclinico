@@ -6,7 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+import com.sistemaclinico.model.enums.StatusConsulta;
+import com.sistemaclinico.model.enums.TipoDesfecho;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,21 +32,41 @@ public class Consulta implements Serializable {
 	@SequenceGenerator(name="gerador3", sequenceName="consulta_codigo_seq", allocationSize=1)
 	@GeneratedValue(generator="gerador3", strategy=GenerationType.SEQUENCE)
 	private Long codigo;
+
 	@NotNull(message = "A data é obrigatória")
 	private LocalDate data;
+
 	@NotNull(message = "O horário é obrigatório")
 	private LocalTime horario;
-	private String pressaoArterial;
+
+	@Enumerated(EnumType.STRING)
+    private StatusConsulta status;
+
 	private BigDecimal pesoKg;
+
     private BigDecimal alturaM;
-    private BigDecimal temperaturaCelsius;
-    private String anotacoesSintomas;
-    private String examesSolicitados;
-    private String laudoConclusao;
+
+	private String pressaoArterial;
+
+    private String temperaturaCelsius;
+
+	@Column(columnDefinition = "TEXT")
+    private String observacoes;
+	
+	@Column(columnDefinition = "TEXT")
+    private String receita;
+
+	@Column(columnDefinition = "TEXT")
+    private String solicitacaoExames;
+
+	@Enumerated(EnumType.STRING)
+    private TipoDesfecho desfecho;
+
 	@NotNull(message = "O paciente é obrigatório")
 	@ManyToOne
 	@JoinColumn(name = "codigo_paciente")
 	private Paciente paciente;
+
 	@NotNull(message = "O médico é obrigatório")
 	@ManyToOne
 	@JoinColumn(name = "codigo_medico")
@@ -94,36 +120,36 @@ public class Consulta implements Serializable {
         this.alturaM = alturaM;
     }
 
-    public BigDecimal getTemperaturaCelsius() {
+    public String getTemperaturaCelsius() {
         return temperaturaCelsius;
     }
 
-    public void setTemperaturaCelsius(BigDecimal temperaturaCelsius) {
+    public void setTemperaturaCelsius(String temperaturaCelsius) {
         this.temperaturaCelsius = temperaturaCelsius;
     }
 
-    public String getAnotacoesSintomas() {
-        return anotacoesSintomas;
+    public String getObservacoes() {
+        return observacoes;
     }
 
-    public void setAnotacoesSintomas(String anotacoesSintomas) {
-        this.anotacoesSintomas = anotacoesSintomas;
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
     }
 
-    public String getExamesSolicitados() {
-        return examesSolicitados;
+    public String getSolicitacaoExames() {
+        return solicitacaoExames;
     }
 
-    public void setExamesSolicitados(String examesSolicitados) {
-        this.examesSolicitados = examesSolicitados;
+    public void setSolicitacaoExames(String solicitacaoExames) {
+        this.solicitacaoExames = solicitacaoExames;
     }
 
-    public String getLaudoConclusao() {
-        return laudoConclusao;
+    public TipoDesfecho getDesfecho() {
+        return desfecho;
     }
 
-    public void setLaudoConclusao(String laudoConclusao) {
-        this.laudoConclusao = laudoConclusao;
+    public void setDesfecho(TipoDesfecho desfecho) {
+        this.desfecho = desfecho;
     }
 
 	public Paciente getPaciente() {
@@ -146,8 +172,8 @@ public class Consulta implements Serializable {
 	public String toString() {
 		return "Consulta [codigo=" + codigo + ", data=" + data + ", horario=" + horario + ", pressaoArterial=" + pressaoArterial
 				+ ", pesoKg=" + pesoKg + ", alturaM=" + alturaM + ", temperaturaCelsius=" + temperaturaCelsius
-				+ ", anotacoesSintomas=" + anotacoesSintomas + ", examesSolicitados=" + examesSolicitados
-				+ ", laudoConclusao=" + laudoConclusao + ", paciente=" + paciente + ", medico=" + medico + "]";
+				+ ", observacoes=" + observacoes + ", solicitacaoExames=" + solicitacaoExames
+				+ ", desfecho=" + desfecho + ", paciente=" + paciente + ", medico=" + medico + "]";
 	}
 
 	@Override

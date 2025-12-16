@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.sistemaclinico.model.enums.StatusPessoa;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,7 +38,7 @@ public class Paciente implements Serializable {
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	@Enumerated(EnumType.STRING)
-	private Status status = Status.ATIVO;
+	private StatusPessoa status = StatusPessoa.ATIVO;
 	private List<Consulta> consultas;
 
 	public Long getCodigo() {
@@ -71,11 +73,11 @@ public class Paciente implements Serializable {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public Status getStatus() {
+	public StatusPessoa getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(StatusPessoa status) {
 		this.status = status;
 	}
 

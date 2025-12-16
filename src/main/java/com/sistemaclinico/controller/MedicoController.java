@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import com.sistemaclinico.filter.MedicoFilter;
 import com.sistemaclinico.model.Medico;
-import com.sistemaclinico.model.Status;
+import com.sistemaclinico.model.enums.StatusPessoa;
 import com.sistemaclinico.notification.NotificacaoSweetAlert2;
 import com.sistemaclinico.notification.TipoNotificaoSweetAlert2;
 import com.sistemaclinico.pagination.PageWrapper;
@@ -132,7 +132,7 @@ public class MedicoController {
         Optional<Medico> medicoOptional = repository.findById(codigo);
         if (medicoOptional.isPresent()) {
             Medico medico = medicoOptional.get();
-            medico.setStatus(Status.INATIVO);
+            medico.setStatus(StatusPessoa.INATIVO);
             service.alterar(medico);
             atributos.addFlashAttribute("notificacao", 
                 new NotificacaoSweetAlert2("Médico removido com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000)); 
