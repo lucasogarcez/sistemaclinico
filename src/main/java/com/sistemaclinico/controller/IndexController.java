@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexController {
 
-	@GetMapping(value = {"/", "/index.html"} )
-	public String index() {
-		return "index";
-	}
-	
+    @GetMapping("/")
+    public String index() {
+        return "index"; // Isso manda abrir o templates/index.html
+    }
 }

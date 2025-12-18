@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR" layout:decorate="~{layout/layoutpadrao}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
+<head><meta charset="UTF-8" /><title>Mostrar Consultas</title></head>
+<body>
+    <main layout:fragment="conteudo" th:fragment="tabela" id="main" class="flex flex-col align-middle w-full m-10">
+        <h1 class="text-xl md:text-2xl">Consultas Agendadas</h1>
+        <h1 th:if="${pagina.vazia}" class="text-lg md:text-xl mt-5">Nenhuma consulta encontrada</h1>
+
+        <div th:if="${not pagina.vazia}" class="flex flex-col mt-5">
+            <div class="overflow-x-auto">
+                <div class="min-w-full inline-block align-middle">
+                    <div class="border rounded-xl overflow-hidden shadow">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <div th:replace="~{layout/fragments/paginacao :: coluna(${pagina}, 'codigo', 'Cód.', '')}"></div>
+                                    <div th:replace="~{layout/fragments/paginacao :: coluna(${pagina}, 'data', 'Data', '')}"></div>
+                                    <div th:replace="~{layout/fragments/paginacao :: coluna(${pagina}, 'horario', 'Horário', '')}"></div>
+                                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Paciente</th>
+                                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Médico</th>
+                                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="consulta : ${pagina.conteudo}" class="odd:bg-white even:bg-gray-100 hover:bg-gray-200">
+                                    <td th:text="${consulta.codigo}" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">1</td>
+                                    <td th:text="${{consulta.data}}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">01/01/2025</td>
+                                    <td th:text="${consulta.horario}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">14:00</td>
+                                    <td th:text="${consulta.paciente.nome}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Paciente X</td>
+                                    <td th:text="${consulta.medico.nome}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Dr. Y</td>
+                                    <td th:text="${consulta.status}" class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-800">AGENDADO</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{layout/fragments/paginacao :: paginacao(${pagina})}"></div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.sistemaclinico.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.sistemaclinico.model.Paciente;
 import com.sistemaclinico.repository.PacienteRepository;
 

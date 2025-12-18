@@ -26,77 +26,93 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "consulta")
 public class Consulta implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@SequenceGenerator(name="gerador3", sequenceName="consulta_codigo_seq", allocationSize=1)
-	@GeneratedValue(generator="gerador3", strategy=GenerationType.SEQUENCE)
-	private Long codigo;
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @SequenceGenerator(name="gerador3", sequenceName="consulta_codigo_seq", allocationSize=1)
+    @GeneratedValue(generator="gerador3", strategy=GenerationType.SEQUENCE)
+    private Long codigo;
 
-	@NotNull(message = "A data é obrigatória")
-	private LocalDate data;
+    @NotNull(message = "A data é obrigatória")
+    private LocalDate data;
 
-	@NotNull(message = "O horário é obrigatório")
-	private LocalTime horario;
+    @NotNull(message = "O horário é obrigatório")
+    private LocalTime horario;
 
-	@Enumerated(EnumType.STRING)
-    private StatusConsulta status;
+    @Enumerated(EnumType.STRING)
+    private StatusConsulta status = StatusConsulta.AGENDADO; // CORREÇÃO: Inicializa com padrão
 
-	private BigDecimal pesoKg;
+    // CORREÇÃO: Adicionado name="peso" pois no Java é pesoKg
+    @Column(name = "peso") 
+    private BigDecimal pesoKg;
 
+    // CORREÇÃO: Adicionado name="altura" pois no Java é alturaM
+    @Column(name = "altura")
     private BigDecimal alturaM;
 
-	private String pressaoArterial;
+    private String pressaoArterial; // Esse funciona automático (pressaoArterial -> pressao_arterial)
 
-    private String temperaturaCelsius;
+    // CORREÇÃO: Adicionado name="temperatura" pois no Java é temperaturaCelsius
+    @Column(name = "temperatura")
+    private BigDecimal temperaturaCelsius; // Note: No SQL está VARCHAR, mas BigDecimal é melhor pra conta. Se quiser manter String, tudo bem.
 
-	@Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String observacoes;
-	
-	@Column(columnDefinition = "TEXT")
+    
+    @Column(columnDefinition = "TEXT")
     private String receita;
 
-	@Column(columnDefinition = "TEXT")
-    private String solicitacaoExames;
+    @Column(columnDefinition = "TEXT")
+    private String solicitacaoExames; // Funciona automático (solicitacaoExames -> solicitacao_exames)
 
-	@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private TipoDesfecho desfecho;
 
-	@NotNull(message = "O paciente é obrigatório")
-	@ManyToOne
-	@JoinColumn(name = "codigo_paciente")
-	private Paciente paciente;
+    @NotNull(message = "O paciente é obrigatório")
+    @ManyToOne
+    @JoinColumn(name = "codigo_paciente")
+    private Paciente paciente;
 
-	@NotNull(message = "O médico é obrigatório")
-	@ManyToOne
-	@JoinColumn(name = "codigo_medico")
-	private Medico medico;
+    @NotNull(message = "O médico é obrigatório")
+    @ManyToOne
+    @JoinColumn(name = "codigo_medico")
+    private Medico medico;
 
-	public Long getCodigo() {
-		return codigo;
-	}
+    // --- GETTERS E SETTERS ---
 
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
+    public Long getCodigo() {
+        return codigo;
+    }
 
-	public LocalDate getData() {
-		return data;
-	}
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
+    }
 
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
+    public LocalDate getData() {
+        return data;
+    }
 
-	public LocalTime getHorario() {
-		return horario;
-	}
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
 
-	public void setHorario(LocalTime horario) {
-		this.horario = horario;
-	}
+    public LocalTime getHorario() {
+        return horario;
+    }
 
-	public String getPressaoArterial() {
+    public void setHorario(LocalTime horario) {
+        this.horario = horario;
+    }
+
+    public StatusConsulta getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusConsulta status) {
+        this.status = status;
+    }
+
+    public String getPressaoArterial() {
         return pressaoArterial;
     }
 
@@ -120,11 +136,12 @@ public class Consulta implements Serializable {
         this.alturaM = alturaM;
     }
 
-    public String getTemperaturaCelsius() {
+    // Ajuste aqui se decidir manter String ou mudar para BigDecimal no banco
+    public BigDecimal getTemperaturaCelsius() {
         return temperaturaCelsius;
     }
 
-    public void setTemperaturaCelsius(String temperaturaCelsius) {
+    public void setTemperaturaCelsius(BigDecimal temperaturaCelsius) {
         this.temperaturaCelsius = temperaturaCelsius;
     }
 
@@ -134,6 +151,15 @@ public class Consulta implements Serializable {
 
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
+    }
+    
+    // CORREÇÃO: Adicionado Get e Set de receita que faltava
+    public String getReceita() {
+        return receita;
+    }
+
+    public void setReceita(String receita) {
+        this.receita = receita;
     }
 
     public String getSolicitacaoExames() {
@@ -152,45 +178,41 @@ public class Consulta implements Serializable {
         this.desfecho = desfecho;
     }
 
-	public Paciente getPaciente() {
-		return paciente;
-	}
+    public Paciente getPaciente() {
+        return paciente;
+    }
 
-	public void setPaciente(Paciente paciente) {
-		this.paciente = paciente;
-	}
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
 
-	public Medico getMedico() {
-		return medico;
-	}
+    public Medico getMedico() {
+        return medico;
+    }
 
-	public void setMedico(Medico medico) {
-		this.medico = medico;
-	}
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
 
-	@Override
-	public String toString() {
-		return "Consulta [codigo=" + codigo + ", data=" + data + ", horario=" + horario + ", pressaoArterial=" + pressaoArterial
-				+ ", pesoKg=" + pesoKg + ", alturaM=" + alturaM + ", temperaturaCelsius=" + temperaturaCelsius
-				+ ", observacoes=" + observacoes + ", solicitacaoExames=" + solicitacaoExames
-				+ ", desfecho=" + desfecho + ", paciente=" + paciente + ", medico=" + medico + "]";
-	}
+    @Override
+    public String toString() {
+        return "Consulta [codigo=" + codigo + ", data=" + data + ", horario=" + horario + ", status=" + status + "]";
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(codigo);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(codigo);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Consulta other = (Consulta) obj;
-		return Objects.equals(codigo, other.codigo);
-	}
-
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Consulta other = (Consulta) obj;
+        return Objects.equals(codigo, other.codigo);
+    }
 }

@@ -437,4 +437,11 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+# Tailwind binaries
+tailwindcss
+tailwindcss-linux-x64
+
+# VS Code
+.vscode/
+
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,intellij,eclipse,visualstudiocode,netbeans,gradle,git,node

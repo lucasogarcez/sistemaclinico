@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <th:block th:fragment="lista-medicos">
+        <li th:each="item : ${listaItens}" 
+            class="p-2 hover:bg-gray-100 cursor-pointer border-b last:border-none"
+            th:data-value="${item.codigo}"> <div class="font-bold text-gray-700" th:text="${item.nome}">Dr. House</div>
+            <div class="text-xs text-gray-500" th:text="'CRM: ' + ${item.crm}">CRM: 1234</div>
+        </li>
+        <li th:if="${#lists.isEmpty(listaItens)}" class="p-2 text-gray-500 italic text-center">Nenhum médico encontrado</li>
+    </th:block>
+
+    <th:block th:fragment="lista-pacientes">
+        <li th:each="item : ${listaItens}" 
+            class="p-2 hover:bg-gray-100 cursor-pointer border-b last:border-none"
+            th:data-value="${item.codigo}"> <div class="font-bold text-gray-700" th:text="${item.nome}">Fulano</div>
+            <div class="text-xs text-gray-500" th:text="'CPF: ' + ${item.cpf}">CPF: 123...</div>
+        </li>
+        <li th:if="${#lists.isEmpty(listaItens)}" class="p-2 text-gray-500 italic text-center">Nenhum paciente encontrado</li>
+    </th:block>
+
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.sistemaclinico.controller;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+
 import com.sistemaclinico.filter.MedicoFilter;
 import com.sistemaclinico.model.Medico;
 import com.sistemaclinico.model.enums.StatusPessoa;
@@ -28,6 +28,9 @@ import com.sistemaclinico.notification.TipoNotificaoSweetAlert2;
 import com.sistemaclinico.pagination.PageWrapper;
 import com.sistemaclinico.repository.MedicoRepository;
 import com.sistemaclinico.service.MedicoService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @Controller
 public class MedicoController {

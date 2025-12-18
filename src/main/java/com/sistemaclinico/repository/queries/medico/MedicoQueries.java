@@ -1,8 +1,10 @@
 package com.sistemaclinico.repository.queries.medico;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import com.sistemaclinico.filter.MedicoFilter;
 import com.sistemaclinico.model.Medico;
 

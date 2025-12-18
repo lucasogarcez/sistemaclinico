@@ -5,21 +5,20 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.sistemaclinico.model.Paciente;
-import com.sistemaclinico.repository.PacienteRepository;
+import com.sistemaclinico.model.Medico;
+import com.sistemaclinico.repository.MedicoRepository;
 
 @Component
-public class StringToPacienteConverter implements Converter<String, Paciente> {
+public class StringToMedicoConverter implements Converter<String, Medico> {
 
     @Autowired
-    private PacienteRepository repository;
+    private MedicoRepository repository;
 
     @Override
-    public Paciente convert(String source) {
+    public Medico convert(String source) {
         if (!StringUtils.hasText(source)) {
             return null;
         }
-        // O segredo: converter o Texto (ID) para Número e buscar pelo ID
         try {
             Long id = Long.valueOf(source);
             return repository.findById(id).orElse(null);

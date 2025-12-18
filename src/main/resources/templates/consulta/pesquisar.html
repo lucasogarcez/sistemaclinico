@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR" layout:decorate="~{layout/layoutpadrao}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
+<head><meta charset="UTF-8" /><title>Pesquisar Consulta</title></head>
+<body>
+    <main layout:fragment="conteudo" th:fragment="formulario" id="main" class="flex flex-col align-middle w-full m-10">
+        <h1 class="text-xl md:text-2xl">Pesquisar Consultas</h1>
+        
+        <form th:hx-get="@{/consulta/pesquisar}" th:object="${consultaFilter}" class="w-full md:w-1/2 mt-10">
+            <div class="flex gap-x-6">
+                 <div class="flex-1">
+                    <div th:replace="~{layout/fragments/forms :: inputSimples('Data da Consulta', 'data', 'data')}"></div>
+                </div>
+                <div class="flex-1">
+                    <div th:replace="~{layout/fragments/forms :: inputSimples('Código', 'codigo', 'number')}"></div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-teal-100 text-teal-800 hover:bg-teal-200 focus:outline-none focus:bg-teal-200 disabled:opacity-50 disabled:pointer-events-none">Pesquisar</button>
+            </div>
+        </form>
+
+        <div th:if="${notificacao != null}" th:object="${notificacao}">
+            <input type="hidden" id="mensagemSA2" th:value="*{mensagem}"><input type="hidden" id="tipoSA2" th:value="*{tipo}"><input type="hidden" id="intervaloSA2" th:value="*{intervalo}">
+        </div>
+    </main>
+</body>
+</html>
