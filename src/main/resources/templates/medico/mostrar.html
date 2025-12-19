@@ -15,6 +15,13 @@
         <h1 th:if="${pagina.vazia}" class="text-lg md:text-xl mt-5">Não foram encontrados médicos nessa pesquisa</h1>
 
         <div th:if="${not pagina.vazia}" class="flex flex-col mt-5">
+
+            <div th:if="${notificacao != null}" th:object="${notificacao}">
+                <input type="hidden" id="mensagemSA2" th:value="*{mensagem}">
+                <input type="hidden" id="tipoSA2" th:value="*{tipo}">
+                <input type="hidden" id="intervaloSA2" th:value="*{intervalo}">
+            </div>
+            
             <div class="overflow-x-auto">
                 <div class="min-w-full inline-block align-middle">
                     <div class="border rounded-xl overflow-hidden shadow">

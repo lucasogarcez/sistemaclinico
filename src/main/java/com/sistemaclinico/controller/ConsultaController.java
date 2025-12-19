@@ -122,9 +122,25 @@ public class ConsultaController {
             
             return "redirect:/consulta/pesquisar"; 
         } catch (Exception e) {
-            atributos.addFlashAttribute("erro", "Erro ao salvar: " + e.getMessage());
+            atributos.addFlashAttribute("notificacao",
+                new NotificacaoSweetAlert2("Erro ao salvar: " + e.getMessage(), TipoNotificaoSweetAlert2.ERROR, 4000));
             return "redirect:/consulta/" + consulta.getCodigo() + "/atender";
         }
+    }
+
+    @PostMapping("/consulta/{codigo}/cancelar")
+    public String cancelar(@PathVariable("codigo") Long codigo, RedirectAttributes atributos) {
+        try {
+            service.cancelarConsulta(codigo);
+            atributos.addFlashAttribute("notificacao", 
+                new NotificacaoSweetAlert2("Consulta cancelada com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
+
+        } catch (Exception e) {
+            atributos.addFlashAttribute("notificacao",
+                new NotificacaoSweetAlert2("Erro ao cancelar: " + e.getMessage(), TipoNotificaoSweetAlert2.ERROR, 4000));
+        }
+        
+        return "redirect:/consulta/pesquisar";
     }
 
     @GetMapping("/consulta/pesquisarmedico")

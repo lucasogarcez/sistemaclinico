@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sistemaclinico.model.enums.StatusPessoa;
 
@@ -36,6 +38,8 @@ public class Paciente implements Serializable {
     private String nome;
 
     @NotBlank(message = "O CPF do paciente é obrigatório")
+    @CPF(message = "CPF inválido")
+    @Column(unique = true)
     private String cpf;
 
     @NotNull(message = "A data de nascimento do paciente é obrigatória")

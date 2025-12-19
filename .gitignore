@@ -440,6 +440,7 @@ gradle-app.setting
 # Tailwind binaries
 tailwindcss
 tailwindcss-linux-x64
+tailwindcss-windows-x64.exe
 
 # VS Code
 .vscode/

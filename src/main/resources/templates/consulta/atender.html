@@ -2,114 +2,208 @@
 <html lang="pt-BR" layout:decorate="~{layout/layoutpadrao}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
 
 <head>
-    <title>Realizar Atendimento</title>
+    <title>Prontuário Eletrônico</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Remove setas do input number */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        /* Scrollbar suave */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+    </style>
 </head>
 
-<body>
-    <section layout:fragment="conteudo" th:fragment="atendimento-form">
+<body class="bg-slate-50">
+    <main layout:fragment="conteudo" th:fragment="atendimento-form" id="main" class="h-full flex flex-col relative overflow-hidden">
         
-        <div class="bg-white rounded-lg shadow-md p-6"> <div class="border-b pb-4 mb-4 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-800">
-                    <span th:if="${consulta.status.name() == 'AGENDADO'}">Realizar Atendimento</span>
-                    <span th:if="${consulta.status.name() != 'AGENDADO'}">Prontuário Médico</span>
-                </h2>
-                
-                <span class="px-3 py-1 rounded-full text-sm font-semibold"
-                      th:classappend="${consulta.status.name() == 'AGENDADO' ? 'bg-blue-100 text-blue-800' : 
-                                      (consulta.status.name() == 'CANCELADO' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800')}"
-                      th:text="${consulta.status}">
-                </span>
-            </div>
+        <form th:action="@{/consulta/finalizar}" hx-target="#container-principal" th:object="${consulta}" method="post" class="h-full flex flex-col">
+            <input type="hidden" th:field="*{codigo}" />
 
-            <div class="bg-blue-50 p-4 rounded-md mb-6 border border-blue-200">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <p class="text-xs text-gray-500 uppercase">Paciente</p>
-                        <p class="font-bold text-gray-800" th:text="${consulta.paciente.nome}"></p>
+            <header class="absolute top-0 left-0 right-0 z-30 px-8 py-4 bg-white/80 backdrop-blur-md border-b border-slate-200/60 flex justify-between items-center transition-all">
+                <div class="flex items-center gap-4">
+                    <div class="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-indigo-200 shadow-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
                     <div>
-                        <p class="text-xs text-gray-500 uppercase">Data/Hora</p>
-                        <p class="font-bold text-gray-800">
-                            <span th:text="${#temporals.format(consulta.data, 'dd/MM/yyyy')}"></span> às 
-                            <span th:text="${consulta.horario}"></span>
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 uppercase">CPF</p>
-                        <p class="font-bold text-gray-800" th:text="${consulta.paciente.cpf}"></p>
-                    </div>
-                </div>
-            </div>
-
-            <form th:action="@{/consulta/finalizar}" th:object="${consulta}" method="post">
-                <input type="hidden" th:field="*{codigo}" />
-
-                <h3 class="text-lg font-semibold text-gray-700 mb-3 border-l-4 border-indigo-500 pl-2">Triagem</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Peso (kg)</label>
-                        <input type="number" step="0.1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                               th:field="*{pesoKg}" th:disabled="${!podeEditar}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Pressão Arterial</label>
-                        <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                               placeholder="Ex: 12/8"
-                               th:field="*{pressaoArterial}" th:disabled="${!podeEditar}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Temperatura (ºC)</label>
-                        <input type="number" step="0.1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                               th:field="*{temperaturaCelsius}" th:disabled="${!podeEditar}">
+                        <h1 class="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                            <span th:if="${consulta.status.name() == 'AGENDADO'}">Atendimento Clínico</span>
+                            <span th:if="${consulta.status.name() != 'AGENDADO'}">Visualizar Prontuário</span>
+                        </h1>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Protocolo #<span th:text="${consulta.codigo}"></span></span>
+                            <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-bold uppercase tracking-wide border"
+                                  th:classappend="${consulta.status.name() == 'AGENDADO' ? 'bg-blue-50 text-blue-600 border-blue-100' : 
+                                                  (consulta.status.name() == 'CANCELADO' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100')}">
+                                <span class="w-1.5 h-1.5 rounded-full" 
+                                      th:classappend="${consulta.status.name() == 'AGENDADO' ? 'bg-blue-500' : 
+                                                      (consulta.status.name() == 'CANCELADO' ? 'bg-red-500' : 'bg-emerald-500')}"></span>
+                                <span th:text="${consulta.status}"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <h3 class="text-lg font-semibold text-gray-700 mb-3 border-l-4 border-indigo-500 pl-2">Diagnóstico e Conduta</h3>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Laudo / Observações</label>
-                    <textarea rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                              th:field="*{observacoes}" th:disabled="${!podeEditar}"></textarea>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Receita Médica</label>
-                        <textarea rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                                  th:field="*{receita}" th:disabled="${!podeEditar}"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Solicitação de Exames</label>
-                        <textarea rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                                  th:field="*{solicitacaoExames}" th:disabled="${!podeEditar}"></textarea>
-                    </div>
-                </div>
-
-                <div class="mb-6 w-full md:w-1/3">
-                    <label class="block text-sm font-medium text-gray-700">Desfecho</label>
-                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                            th:field="*{desfecho}" th:disabled="${!podeEditar}">
-                        <option value="">Selecione...</option>
-                        <option th:each="tipo : ${T(com.sistemaclinico.model.enums.TipoDesfecho).values()}"
-                                th:value="${tipo}" 
-                                th:text="${tipo.getDescricao()}">
-                        </option>
-                    </select>
-                </div>
-
-                <div class="flex justify-end space-x-3 pt-4 border-t">
-                    <a th:href="@{/consulta/pesquisar}" class="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        Voltar
+                <div class="flex items-center gap-3">
+                    <a th:href="@{/consulta/pesquisar}" 
+                       class="text-slate-500 hover:text-slate-800 text-sm font-semibold px-4 py-2 transition-colors rounded-lg hover:bg-slate-100">
+                        Cancelar
                     </a>
                     
                     <button type="submit" th:if="${podeEditar}"
-                        class="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-700 bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        th:text="${consulta.getStatus().getDescricao() == 'agendado' ? 'Finalizar Atendimento' : 'Salvar Alterações'}">
+                            class="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 bg-slate-900 rounded-lg hover:bg-slate-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900">
+                        <span th:text="${consulta.getStatus().getDescricao() == 'agendado' ? 'Finalizar Atendimento' : 'Salvar Alterações'}"></span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
                 </div>
+            </header>
 
-            </form>
+            <div class="flex-1 overflow-y-auto custom-scroll pt-24 pb-12 px-8">
+                <div class="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+
+                    <div class="col-span-12 lg:col-span-4 space-y-6">
+                        
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <svg class="w-24 h-24 text-indigo-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 14c4.418 0 8 1.79 8 4v2H4v-2c0-2.21 3.582-4 8-4zM12 12a4 4 0 110-8 4 4 0 010 8z"/></svg>
+                            </div>
+                            
+                            <div class="relative z-10">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Paciente</p>
+                                <h2 class="text-2xl font-bold text-slate-900 leading-tight mb-1" th:text="${consulta.paciente.nome}">Nome do Paciente</h2>
+                                <p class="text-sm font-medium text-slate-500 font-mono mb-6" th:text="${consulta.paciente.cpf}">000.000.000-00</p>
+                                
+                                <div class="flex items-center gap-4 text-sm">
+                                    <div class="flex items-center gap-2 text-slate-600 bg-slate-50 px-3 py-1.5 rounded-md border border-slate-100">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <span class="font-semibold" th:text="${#temporals.format(consulta.data, 'dd/MM/yyyy')}"></span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-slate-600 bg-slate-50 px-3 py-1.5 rounded-md border border-slate-100">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span class="font-semibold" th:text="${consulta.horario}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                            <div class="bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
+                                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Sinais Vitais</h3>
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            
+                            <div class="p-6 space-y-6">
+                                <div class="relative group">
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1 group-focus-within:text-indigo-600 transition-colors">PESO CORPORAL</label>
+                                    <div class="relative">
+                                        <input type="number" step="0.1" th:field="*{pesoKg}" th:disabled="${!podeEditar}"
+                                               class="block w-full bg-slate-50 border-0 rounded-lg text-slate-900 font-bold text-2xl py-3 px-4 shadow-inner ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all disabled:text-slate-500 disabled:bg-slate-100 placeholder:text-slate-300"
+                                               placeholder="00,0">
+                                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400 pointer-events-none">kg</span>
+                                    </div>
+                                </div>
+
+                                <div class="relative group">
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1 group-focus-within:text-indigo-600 transition-colors">TEMPERATURA</label>
+                                    <div class="relative">
+                                        <input type="number" step="0.1" th:field="*{temperaturaCelsius}" th:disabled="${!podeEditar}"
+                                               class="block w-full bg-slate-50 border-0 rounded-lg text-slate-900 font-bold text-2xl py-3 px-4 shadow-inner ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all disabled:text-slate-500 disabled:bg-slate-100 placeholder:text-slate-300"
+                                               placeholder="00,0">
+                                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400 pointer-events-none">°C</span>
+                                    </div>
+                                </div>
+
+                                <div class="relative group">
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1 group-focus-within:text-indigo-600 transition-colors">PRESSÃO ARTERIAL</label>
+                                    <div class="relative">
+                                        <input type="text" th:field="*{pressaoArterial}" th:disabled="${!podeEditar}"
+                                               class="block w-full bg-slate-50 border-0 rounded-lg text-slate-900 font-bold text-2xl py-3 px-4 shadow-inner ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all disabled:text-slate-500 disabled:bg-slate-100 placeholder:text-slate-300"
+                                               placeholder="12/8">
+                                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400 pointer-events-none">mmHg</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-12 lg:col-span-8 space-y-8">
+                        
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-1">
+                            <div class="p-6">
+                                <label class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-3">
+                                    <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </span>
+                                    Anamnese & Evolução Clínica
+                                </label>
+                                <textarea th:field="*{observacoes}" th:disabled="${!podeEditar}" rows="8"
+                                          class="block w-full rounded-xl border-0 py-4 px-4 text-slate-700 bg-slate-50 ring-1 ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all resize-y text-base leading-relaxed"
+                                          placeholder="Descreva o histórico da moléstia atual, exame físico e hipóteses diagnósticas..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-1 flex flex-col h-full">
+                                <div class="p-5 flex-1 flex flex-col">
+                                    <label class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-3">
+                                        <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </span>
+                                        Prescrição Médica
+                                    </label>
+                                    <textarea th:field="*{receita}" th:disabled="${!podeEditar}" rows="6"
+                                              class="flex-1 block w-full rounded-xl border-0 py-3 px-4 text-slate-700 bg-slate-50 ring-1 ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all resize-none leading-relaxed"
+                                              placeholder="• Medicamento X - 500mg..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-1 flex flex-col h-full">
+                                <div class="p-5 flex-1 flex flex-col">
+                                    <label class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-3">
+                                        <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                        </span>
+                                        Exames Complementares
+                                    </label>
+                                    <textarea th:field="*{solicitacaoExames}" th:disabled="${!podeEditar}" rows="6"
+                                              class="flex-1 block w-full rounded-xl border-0 py-3 px-4 text-slate-700 bg-slate-50 ring-1 ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all resize-none leading-relaxed"
+                                              placeholder="• Hemograma completo..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 rounded-2xl p-6 shadow-xl text-white flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div>
+                                <h4 class="font-bold text-lg">Conclusão do Atendimento</h4>
+                                <p class="text-slate-400 text-sm">Selecione o destino do paciente para finalizar.</p>
+                            </div>
+                            <div class="w-full md:w-1/3">
+                                <select th:field="*{desfecho}" th:disabled="${!podeEditar}"
+                                        class="block w-full rounded-lg border-0 bg-slate-800 text-white shadow-sm focus:ring-2 focus:ring-indigo-500 py-3 px-4 disabled:opacity-50 font-medium">
+                                    <option value="">-- Selecione o Status --</option>
+                                    <option th:each="tipo : ${T(com.sistemaclinico.model.enums.TipoDesfecho).values()}"
+                                            th:value="${tipo}" 
+                                            th:text="${tipo.getDescricao()}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="h-12"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div th:if="${notificacao != null}" th:object="${notificacao}">
+            <input type="hidden" id="mensagemSA2" th:value="*{mensagem}">
+            <input type="hidden" id="tipoSA2" th:value="*{tipo}">
+            <input type="hidden" id="intervaloSA2" th:value="*{intervalo}">
         </div>
-    </section>
+    </main>
 </body>
 </html>
