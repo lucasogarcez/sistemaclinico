@@ -20,4 +20,9 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long>, Consu
     Page<Consulta> pesquisar(ConsultaFilter filtro, Pageable pageable);
 
     boolean existsByMedicoAndDataAndHorarioAndStatusNot(Medico medico, LocalDate data, LocalTime horario, StatusConsulta status);
+<<<<<<< HEAD
+=======
+
+    boolean existsByMedicoAndDataAndHorarioAndStatusNotAndCodigoNot(Medico medico, LocalDate data, LocalTime horario, StatusConsulta status, Long codigo);
+>>>>>>> bfb3025 (Correção visuais e validações)
 }

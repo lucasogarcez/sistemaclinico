@@ -19,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -33,6 +34,7 @@ public class Consulta implements Serializable {
     private Long codigo;
 
     @NotNull(message = "A data é obrigatória")
+    @FutureOrPresent(message = "A data da consulta não pode ser no passado")
     private LocalDate data;
 
     @NotNull(message = "O horário é obrigatório")

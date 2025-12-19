@@ -1,8 +1,10 @@
 package com.sistemaclinico.repository;
 
 import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import com.sistemaclinico.model.Paciente;
 import com.sistemaclinico.repository.queries.paciente.PacienteQueries;
 

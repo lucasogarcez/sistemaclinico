@@ -445,4 +445,9 @@ tailwindcss-windows-x64.exe
 # VS Code
 .vscode/
 
+tailwindcss
+tailwindcss-linux-x64
+.vscode/
+
+
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,intellij,eclipse,visualstudiocode,netbeans,gradle,git,node

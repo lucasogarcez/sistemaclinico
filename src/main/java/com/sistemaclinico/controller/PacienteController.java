@@ -2,8 +2,11 @@ package com.sistemaclinico.controller;
 
 import java.util.Optional;
 
+<<<<<<< HEAD
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+=======
+>>>>>>> bfb3025 (Correção visuais e validações)
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,12 +30,14 @@ import com.sistemaclinico.repository.PacienteRepository;
 import com.sistemaclinico.service.PacienteService;
 
 import jakarta.servlet.http.HttpServletRequest;
+<<<<<<< HEAD
+=======
+import jakarta.servlet.http.HttpServletResponse;
+>>>>>>> bfb3025 (Correção visuais e validações)
 import jakarta.validation.Valid;
 
 @Controller
 public class PacienteController {
-
-    private static final Logger logger = LoggerFactory.getLogger(PacienteController.class);
 
     private PacienteRepository repository;
     private PacienteService service;
@@ -67,9 +72,19 @@ public class PacienteController {
 
     @PostMapping("/paciente/cadastrar")
     public String cadastrar(@Valid Paciente paciente, BindingResult resultado, RedirectAttributes atributos) {
+        
+        if (paciente.getCpf() != null) {
+            Paciente pacienteExistente = service.buscarPorCpf(paciente.getCpf());
+            
+            if (pacienteExistente != null) {
+                resultado.rejectValue("cpf", "cpf.existente", "Já existe um paciente cadastrado com este CPF");
+            }
+        }
+
         if (resultado.hasErrors()) {
             return "paciente/cadastrar :: formulario";
         }
+
         service.salvar(paciente);
         atributos.addFlashAttribute("notificacao", new NotificacaoSweetAlert2("Paciente cadastrado com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
         return "redirect:/paciente/cadastrar";
@@ -87,23 +102,49 @@ public class PacienteController {
     }
 
     @PostMapping("/paciente/alterar")
-    public String alterar(@Valid Paciente paciente, BindingResult resultado, RedirectAttributes atributos) {
+    public String alterar(@Valid Paciente paciente, BindingResult resultado, RedirectAttributes atributos, HttpServletRequest request, HttpServletResponse response) {
+
+        if (paciente.getCpf() != null) {
+            String cpfLimpo = paciente.getCpf().replaceAll("\\D", ""); 
+            
+            Paciente pacienteExistente = service.buscarPorCpf(cpfLimpo);
+
+            if (pacienteExistente != null && !pacienteExistente.getCodigo().equals(paciente.getCodigo())) {
+                resultado.rejectValue("cpf", "cpf.existente", "Este CPF já pertence a outro paciente");
+            }
+        }
+
         if (resultado.hasErrors()) {
             return "paciente/alterar :: formulario";
         }
+
+        paciente.setCpf(paciente.getCpf().replaceAll("\\D", "")); 
+
         service.alterar(paciente);
+        
         atributos.addFlashAttribute("notificacao", new NotificacaoSweetAlert2("Paciente alterado com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
+        
+        if (request.getHeader("HX-Request") != null) {
+            response.setHeader("HX-Redirect", "/paciente/abrirpesquisa");
+        }
+        
         return "redirect:/paciente/abrirpesquisa";
     }
     
     @GetMapping("/paciente/remover/{codigo}")
-    public String remover(@PathVariable("codigo") Long codigo, Model model, RedirectAttributes atributos) {
+    public String remover(@PathVariable("codigo") Long codigo, Model model, RedirectAttributes atributos, HttpServletRequest request, HttpServletResponse response) {
         Optional<Paciente> pacienteOptional = repository.findById(codigo);
         if (pacienteOptional.isPresent()) {
             Paciente paciente = pacienteOptional.get();
-            paciente.setStatus(StatusPessoa.INATIVO); // Exclusão Lógica
+            paciente.setStatus(StatusPessoa.INATIVO); 
             service.alterar(paciente);
+            
             atributos.addFlashAttribute("notificacao", new NotificacaoSweetAlert2("Paciente removido com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000)); 
+            
+            if (request.getHeader("HX-Request") != null) {
+                response.setHeader("HX-Redirect", "/paciente/abrirpesquisa");
+            }
+
             return "redirect:/paciente/abrirpesquisa";
         }
         return "mensagem :: texto";

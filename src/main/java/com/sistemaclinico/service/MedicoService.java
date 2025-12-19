@@ -10,6 +10,10 @@ public class MedicoService {
 
     private MedicoRepository repository;
 
+    public Medico buscarPorCrm(String crm) {
+        return repository.findByCrm(crm);
+    }
+
     public MedicoService(MedicoRepository repository) {
         this.repository = repository;
     }

@@ -14,6 +14,10 @@ public class PacienteService {
         this.repository = repository;
     }
 
+    public Paciente buscarPorCpf(String cpf) {
+        return repository.findByCpf(cpf);
+    }
+
     @Transactional
     public void salvar(Paciente paciente) {
         repository.save(paciente);

@@ -18,6 +18,7 @@ public class ConsultaService {
 
     @Transactional
     public void salvar(Consulta consulta) {
+<<<<<<< HEAD
         if (consulta.getCodigo() == null) {
             consulta.setStatus(StatusConsulta.AGENDADO);
         }
@@ -29,6 +30,30 @@ public class ConsultaService {
             consulta.getHorario(), 
             StatusConsulta.CANCELADO
         );
+=======
+        boolean horarioOcupado;
+
+        // LÓGICA DE VALIDAÇÃO DE HORÁRIO
+        if (consulta.getCodigo() != null) {
+            // Edição: Verifica conflito ignorando a própria consulta atual
+            horarioOcupado = repository.existsByMedicoAndDataAndHorarioAndStatusNotAndCodigoNot(
+                consulta.getMedico(), 
+                consulta.getData(),
+                consulta.getHorario(), 
+                StatusConsulta.CANCELADO,
+                consulta.getCodigo()
+            );
+        } else {
+            // Cadastro Novo: Define status inicial e verifica conflito total
+            consulta.setStatus(StatusConsulta.AGENDADO);
+            horarioOcupado = repository.existsByMedicoAndDataAndHorarioAndStatusNot(
+                consulta.getMedico(), 
+                consulta.getData(),
+                consulta.getHorario(), 
+                StatusConsulta.CANCELADO
+            );
+        }
+>>>>>>> bfb3025 (Correção visuais e validações)
 
         if (horarioOcupado) {
             throw new IllegalArgumentException("Este médico já possui agendamento neste horário.");
