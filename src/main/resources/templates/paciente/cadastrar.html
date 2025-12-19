@@ -4,7 +4,7 @@
 <body>
     <main layout:fragment="conteudo" th:fragment="formulario" id="main" class="flex flex-col align-middle w-full m-10">
         <h1 class="text-xl md:text-2xl">Cadastrar Paciente</h1>
-        <form th:hx-post="@{/paciente/cadastrar}" th:object="${paciente}" class="w-full md:w-1/2 mt-5">
+        <form th:hx-post="@{/paciente/cadastrar}" hx-target="#main" th:object="${paciente}" class="w-full md:w-1/2 mt-5">
             
             <div th:replace="~{layout/fragments/forms :: inputValidado('Nome do Paciente', 'nome', 'text')}"></div>
             

@@ -1,7 +1,6 @@
 package com.sistemaclinico.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,19 +76,56 @@ public class ConsultaController {
 
     @PostMapping("/consulta/cadastrar")
     public String cadastrar(@Valid Consulta consulta, BindingResult resultado, RedirectAttributes atributos) {
+        
         if (resultado.hasErrors()) {
             return "consulta/cadastrar :: formulario";
         }
-        // Define status inicial como AGENDADO se for nulo
-        if (consulta.getStatus() == null) {
-            consulta.setStatus(StatusConsulta.AGENDADO);
+        try {
+            service.salvar(consulta);
+            
+            atributos.addFlashAttribute("notificacao", new NotificacaoSweetAlert2("Consulta agendada com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
+            return "redirect:/consulta/cadastrar";
+            
+        } catch (IllegalArgumentException e) {
+            resultado.rejectValue("horario", "erro.regraNegocio", e.getMessage());
+            
+            return "consulta/cadastrar :: formulario";
         }
-        service.salvar(consulta);
-        atributos.addFlashAttribute("notificacao", new NotificacaoSweetAlert2("Consulta agendada com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
-        return "redirect:/consulta/cadastrar";
     }
+
+    // Abre a tela de atendimento (Prontuário)
+    @GetMapping("/consulta/{codigo}/atender")
+    public String iniciarAtendimento(@PathVariable Long codigo, Model model, HttpServletRequest request) {
+        Consulta consulta = service.buscarPorCodigo(codigo);
     
-    // --- Métodos Especiais para os Campos de Busca (Autocomplete) ---
+        // Regra para bloquear edição se cancelado
+        boolean podeEditar = consulta.getStatus() != StatusConsulta.CANCELADO;
+        
+        model.addAttribute("consulta", consulta);
+        model.addAttribute("podeEditar", podeEditar);
+
+        if (request.getHeader("HX-Request") != null) {
+            return "consulta/atender :: atendimento-form";
+        }
+
+        return "consulta/atender";
+    }
+
+    // Salva o atendimento finalizado
+    @PostMapping("/consulta/finalizar") 
+    public String finalizarAtendimento(Consulta consulta, RedirectAttributes atributos) {
+        try {
+            service.finalizarConsulta(consulta.getCodigo(), consulta);
+            
+            atributos.addFlashAttribute("notificacao", 
+                new NotificacaoSweetAlert2("Atendimento salvo com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
+            
+            return "redirect:/consulta/pesquisar"; 
+        } catch (Exception e) {
+            atributos.addFlashAttribute("erro", "Erro ao salvar: " + e.getMessage());
+            return "redirect:/consulta/" + consulta.getCodigo() + "/atender";
+        }
+    }
 
     @GetMapping("/consulta/pesquisarmedico")
     public String pesquisarMedico(@RequestParam(name = "medicoBusca", required = false) String nome, Model model) {

@@ -28,12 +28,6 @@ public class ConsultaQueriesImpl implements ConsultaQueries {
 
         preencherCondicoesEParametros(filtro, condicoes, parametros);
 
-        if (condicoes.isEmpty()) {
-            condicoes.append(" where a.status = 'AGENDADO'"); // Ajustado para bater com seu Enum (ou use ATIVO se for String pura)
-        } else {
-            condicoes.append(" and a.status = 'AGENDADO'");
-        }
-
         queryConsultas.append(condicoes);
         PaginacaoUtil.prepararOrdemJPQL(queryConsultas, "a", pageable);
         TypedQuery<Consulta> typedQuery = em.createQuery(queryConsultas.toString(), Consulta.class);
@@ -53,12 +47,6 @@ public class ConsultaQueriesImpl implements ConsultaQueries {
         Map<String, Object> parametros = new HashMap<>();
 
         preencherCondicoesEParametros(filtro, condicoes, parametros);
-
-        if (condicoes.isEmpty()) {
-            condicoes.append(" where a.status = 'AGENDADO'");
-        } else {
-            condicoes.append(" and a.status = 'AGENDADO'");
-        }
 
         queryConsultas.append(condicoes);
         TypedQuery<Consulta> typedQuery = em.createQuery(queryConsultas.toString(), Consulta.class);

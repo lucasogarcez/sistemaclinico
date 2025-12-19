@@ -19,6 +19,7 @@
                                     <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Paciente</th>
                                     <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Médico</th>
                                     <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -29,6 +30,19 @@
                                     <td th:text="${consulta.paciente.nome}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Paciente X</td>
                                     <td th:text="${consulta.medico.nome}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Dr. Y</td>
                                     <td th:text="${consulta.status}" class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-800">AGENDADO</td>
+                                    <td class="px-4 py-4 text-end whitespace-nowrap text-sm text-gray-800">
+                                        <a th:if="${consulta.status.name() == 'AGENDADO'}"
+                                            th:href="@{/consulta/{codigo}/atender(codigo=${consulta.codigo})}"
+                                            class="btn btn-primary btn-sm" title="Realizar Atendimento">
+                                            Atender
+                                        </a>
+
+                                        <a th:if="${consulta.status.name() == 'FINALIZADO'}"
+                                            th:href="@{/consulta/{codigo}/atender(codigo=${consulta.codigo})}"
+                                            class="btn btn-info btn-sm" title="Editar ou Ver Prontuário">
+                                            Editar Laudo
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

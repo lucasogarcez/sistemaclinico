@@ -1,7 +1,6 @@
 package com.sistemaclinico.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -40,21 +39,18 @@ public class Consulta implements Serializable {
     private LocalTime horario;
 
     @Enumerated(EnumType.STRING)
-    private StatusConsulta status = StatusConsulta.AGENDADO; // CORREÇÃO: Inicializa com padrão
+    private StatusConsulta status = StatusConsulta.AGENDADO;
 
-    // CORREÇÃO: Adicionado name="peso" pois no Java é pesoKg
     @Column(name = "peso") 
-    private BigDecimal pesoKg;
+    private Double pesoKg;
 
-    // CORREÇÃO: Adicionado name="altura" pois no Java é alturaM
     @Column(name = "altura")
-    private BigDecimal alturaM;
+    private Double alturaM;
 
-    private String pressaoArterial; // Esse funciona automático (pressaoArterial -> pressao_arterial)
+    private String pressaoArterial;
 
-    // CORREÇÃO: Adicionado name="temperatura" pois no Java é temperaturaCelsius
     @Column(name = "temperatura")
-    private BigDecimal temperaturaCelsius; // Note: No SQL está VARCHAR, mas BigDecimal é melhor pra conta. Se quiser manter String, tudo bem.
+    private Double temperaturaCelsius;
 
     @Column(columnDefinition = "TEXT")
     private String observacoes;
@@ -63,7 +59,7 @@ public class Consulta implements Serializable {
     private String receita;
 
     @Column(columnDefinition = "TEXT")
-    private String solicitacaoExames; // Funciona automático (solicitacaoExames -> solicitacao_exames)
+    private String solicitacaoExames;
 
     @Enumerated(EnumType.STRING)
     private TipoDesfecho desfecho;
@@ -120,28 +116,27 @@ public class Consulta implements Serializable {
         this.pressaoArterial = pressaoArterial;
     }
 
-    public BigDecimal getPesoKg() {
+    public Double getPesoKg() {
         return pesoKg;
     }
 
-    public void setPesoKg(BigDecimal pesoKg) {
+    public void setPesoKg(Double pesoKg) {
         this.pesoKg = pesoKg;
     }
 
-    public BigDecimal getAlturaM() {
+    public Double getAlturaM() {
         return alturaM;
     }
 
-    public void setAlturaM(BigDecimal alturaM) {
+    public void setAlturaM(Double alturaM) {
         this.alturaM = alturaM;
     }
 
-    // Ajuste aqui se decidir manter String ou mudar para BigDecimal no banco
-    public BigDecimal getTemperaturaCelsius() {
+    public Double getTemperaturaCelsius() {
         return temperaturaCelsius;
     }
 
-    public void setTemperaturaCelsius(BigDecimal temperaturaCelsius) {
+    public void setTemperaturaCelsius(Double temperaturaCelsius) {
         this.temperaturaCelsius = temperaturaCelsius;
     }
 
@@ -153,7 +148,6 @@ public class Consulta implements Serializable {
         this.observacoes = observacoes;
     }
     
-    // CORREÇÃO: Adicionado Get e Set de receita que faltava
     public String getReceita() {
         return receita;
     }
