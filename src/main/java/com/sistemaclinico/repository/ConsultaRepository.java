@@ -2,7 +2,7 @@ package com.sistemaclinico.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+// Não esqueça de importar List se precisar, mas aqui não é estritamente necessário para o boolean
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,10 +19,20 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long>, Consu
     
     Page<Consulta> pesquisar(ConsultaFilter filtro, Pageable pageable);
 
-    boolean existsByMedicoAndDataAndHorarioAndStatusNot(Medico medico, LocalDate data, LocalTime horario, StatusConsulta status);
-<<<<<<< HEAD
-=======
+    boolean existsByMedicoAndDataAndStatusNotAndHorarioBetween(
+        Medico medico, 
+        LocalDate data, 
+        StatusConsulta status, 
+        LocalTime horarioInicio, 
+        LocalTime horarioFim
+    );
 
-    boolean existsByMedicoAndDataAndHorarioAndStatusNotAndCodigoNot(Medico medico, LocalDate data, LocalTime horario, StatusConsulta status, Long codigo);
->>>>>>> bfb3025 (Correção visuais e validações)
+    boolean existsByMedicoAndDataAndStatusNotAndHorarioBetweenAndCodigoNot(
+        Medico medico, 
+        LocalDate data, 
+        StatusConsulta status, 
+        LocalTime horarioInicio, 
+        LocalTime horarioFim,
+        Long codigo
+    );
 }

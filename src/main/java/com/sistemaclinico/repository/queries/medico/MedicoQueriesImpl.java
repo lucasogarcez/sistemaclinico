@@ -69,7 +69,6 @@ public class MedicoQueriesImpl implements MedicoQueries {
 
     @Override
     public List<Medico> pesquisarGeral(String filtro) {
-        // Método não utilizado no filtro atual, mas mantido para compatibilidade
         return pesquisar(new MedicoFilter()); 
     }
 

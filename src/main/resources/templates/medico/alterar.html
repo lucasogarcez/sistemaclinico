@@ -12,17 +12,7 @@
 
         <h1 class="text-xl md:text-2xl">Alterar Médico</h1>
 
-<<<<<<< HEAD
         <form th:hx-post="@{/medico/alterar}" th:object="${medico}" data-validate="medico-alterar" hx-target="#container-principal" hx-swap="innerHTML" class="w-full md:w-1/2 mt-10">
-=======
-        <form th:hx-post="@{/medico/alterar}" 
-              th:object="${medico}" 
-              data-validate="medico-alterar" 
-              hx-target="#container-principal" 
-              hx-swap="innerHTML" 
-              class="w-full md:w-1/2 mt-10">
-            
->>>>>>> bfb3025 (Correção visuais e validações)
             <div class="md:w-1/2">
                 <div th:replace="~{layout/fragments/forms :: inputSimplesComValor('Código', 'codigo', 'number', *{codigo}, true)}"></div>
                 <input type="hidden" th:field="*{codigo}">

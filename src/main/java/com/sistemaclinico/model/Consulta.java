@@ -76,8 +76,6 @@ public class Consulta implements Serializable {
     @JoinColumn(name = "codigo_medico")
     private Medico medico;
 
-    // --- GETTERS E SETTERS ---
-
     public Long getCodigo() {
         return codigo;
     }

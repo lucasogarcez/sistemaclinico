@@ -2,11 +2,6 @@ package com.sistemaclinico.controller;
 
 import java.util.Optional;
 
-<<<<<<< HEAD
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-=======
->>>>>>> bfb3025 (Correção visuais e validações)
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,10 +25,7 @@ import com.sistemaclinico.repository.PacienteRepository;
 import com.sistemaclinico.service.PacienteService;
 
 import jakarta.servlet.http.HttpServletRequest;
-<<<<<<< HEAD
-=======
 import jakarta.servlet.http.HttpServletResponse;
->>>>>>> bfb3025 (Correção visuais e validações)
 import jakarta.validation.Valid;
 
 @Controller

@@ -1,6 +1,7 @@
 package com.sistemaclinico.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sistemaclinico.filter.ConsultaFilter;
-import com.sistemaclinico.filter.MedicoFilter;
-import com.sistemaclinico.filter.PacienteFilter;
 import com.sistemaclinico.model.Consulta;
 import com.sistemaclinico.model.Medico;
 import com.sistemaclinico.model.Paciente;
@@ -30,6 +29,7 @@ import com.sistemaclinico.repository.ConsultaRepository;
 import com.sistemaclinico.repository.MedicoRepository;
 import com.sistemaclinico.repository.PacienteRepository;
 import com.sistemaclinico.service.ConsultaService;
+import com.sistemaclinico.model.enums.StatusPessoa;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -73,40 +73,19 @@ public class ConsultaController {
 
     @PostMapping("/consulta/cadastrar")
     public String cadastrar(@Valid Consulta consulta, BindingResult resultado, RedirectAttributes atributos) {
-        
         if (resultado.hasErrors()) {
             return "consulta/cadastrar :: formulario";
         }
         try {
             service.salvar(consulta);
-<<<<<<< HEAD
-            
-            atributos.addFlashAttribute("notificacao", new NotificacaoSweetAlert2("Consulta agendada com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
-            return "redirect:/consulta/cadastrar";
-            
-        } catch (IllegalArgumentException e) {
-            resultado.rejectValue("horario", "erro.regraNegocio", e.getMessage());
-            
-=======
             atributos.addFlashAttribute("notificacao", new NotificacaoSweetAlert2("Consulta agendada com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
             return "redirect:/consulta/cadastrar";
         } catch (IllegalArgumentException e) {
             resultado.rejectValue("horario", "erro.regraNegocio", e.getMessage());
->>>>>>> bfb3025 (Correção visuais e validações)
             return "consulta/cadastrar :: formulario";
         }
     }
 
-<<<<<<< HEAD
-    // Abre a tela de atendimento (Prontuário)
-    @GetMapping("/consulta/{codigo}/atender")
-    public String iniciarAtendimento(@PathVariable Long codigo, Model model, HttpServletRequest request) {
-        Consulta consulta = service.buscarPorCodigo(codigo);
-    
-        // Regra para bloquear edição se cancelado
-        boolean podeEditar = consulta.getStatus() != StatusConsulta.CANCELADO;
-        
-=======
     @GetMapping("/consulta/alterar/{codigo}")
     public String abrirAlterar(@PathVariable("codigo") Long codigo, Model model) {
         Optional<Consulta> consulta = repository.findById(codigo);
@@ -147,37 +126,21 @@ public class ConsultaController {
     public String iniciarAtendimento(@PathVariable Long codigo, Model model, HttpServletRequest request) {
         Consulta consulta = service.buscarPorCodigo(codigo);
         boolean podeEditar = consulta.getStatus() != StatusConsulta.CANCELADO;
->>>>>>> bfb3025 (Correção visuais e validações)
         model.addAttribute("consulta", consulta);
         model.addAttribute("podeEditar", podeEditar);
 
         if (request.getHeader("HX-Request") != null) {
             return "consulta/atender :: atendimento-form";
         }
-<<<<<<< HEAD
-
         return "consulta/atender";
     }
 
-    // Salva o atendimento finalizado
-=======
-        return "consulta/atender";
-    }
-
->>>>>>> bfb3025 (Correção visuais e validações)
     @PostMapping("/consulta/finalizar") 
     public String finalizarAtendimento(Consulta consulta, RedirectAttributes atributos) {
         try {
             service.finalizarConsulta(consulta.getCodigo(), consulta);
-<<<<<<< HEAD
-            
             atributos.addFlashAttribute("notificacao", 
                 new NotificacaoSweetAlert2("Atendimento salvo com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
-            
-=======
-            atributos.addFlashAttribute("notificacao", 
-                new NotificacaoSweetAlert2("Atendimento salvo com sucesso!", TipoNotificaoSweetAlert2.SUCCESS, 4000));
->>>>>>> bfb3025 (Correção visuais e validações)
             return "redirect:/consulta/pesquisar"; 
         } catch (Exception e) {
             atributos.addFlashAttribute("notificacao",
@@ -197,28 +160,41 @@ public class ConsultaController {
             atributos.addFlashAttribute("notificacao",
                 new NotificacaoSweetAlert2("Erro ao cancelar: " + e.getMessage(), TipoNotificaoSweetAlert2.ERROR, 4000));
         }
-<<<<<<< HEAD
-        
-=======
->>>>>>> bfb3025 (Correção visuais e validações)
         return "redirect:/consulta/pesquisar";
     }
 
     @GetMapping("/consulta/pesquisarmedico")
-    public String pesquisarMedico(@RequestParam(name = "busca", required = false) String nome, Model model) {
-        MedicoFilter filtro = new MedicoFilter();
-        filtro.setNome(nome);
-        List<Medico> medicos = medicoRepository.pesquisar(filtro);
+    public String pesquisarMedico(@RequestParam(name = "busca", required = false) String termo, Model model) {
+        
+        List<Medico> medicos;
+
+        if (termo == null || termo.trim().isEmpty()) {
+            // Se vazio, busca TODOS que estão ATIVOS
+            medicos = medicoRepository.findByStatus(StatusPessoa.ATIVO);
+        } else {
+            // Se digitou, busca pelo NOME e que estão ATIVOS
+            medicos = medicoRepository.findByNomeContainingIgnoreCaseAndStatus(termo, StatusPessoa.ATIVO);
+        }
+
         model.addAttribute("listaItens", medicos);
         return "consulta/fragmentos-busca :: lista-medicos";
     }
 
     @GetMapping("/consulta/pesquisarpaciente")
-    public String pesquisarPaciente(@RequestParam(name = "busca", required = false) String nome, Model model) {
-        PacienteFilter filtro = new PacienteFilter();
-        filtro.setNome(nome);
-        List<Paciente> pacientes = pacienteRepository.pesquisar(filtro);
+    public String pesquisarPaciente(@RequestParam(name = "busca", required = false) String termo, Model model) {
+        
+        List<Paciente> pacientes;
+
+        if (termo == null || termo.trim().isEmpty()) {
+            // Se vazio, busca TODOS que estão ATIVOS
+            pacientes = pacienteRepository.findByStatus(StatusPessoa.ATIVO);
+        } else {
+            // Se digitou, busca pelo NOME e que estão ATIVOS
+            pacientes = pacienteRepository.findByNomeContainingIgnoreCaseAndStatus(termo, StatusPessoa.ATIVO);
+        }
+
         model.addAttribute("listaItens", pacientes);
         return "consulta/fragmentos-busca :: lista-pacientes";
     }
+
 }
