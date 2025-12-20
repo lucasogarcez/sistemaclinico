@@ -19,9 +19,6 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long>, Consu
     
     Page<Consulta> pesquisar(ConsultaFilter filtro, Pageable pageable);
 
-<<<<<<< Updated upstream
-    boolean existsByMedicoAndDataAndHorarioAndStatusNot(Medico medico, LocalDate data, LocalTime horario, StatusConsulta status);
-=======
     boolean existsByMedicoAndDataAndStatusNotAndHorarioBetween(
         Medico medico, 
         LocalDate data, 
@@ -38,5 +35,4 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long>, Consu
         LocalTime horarioFim,
         Long codigo
     );
->>>>>>> Stashed changes
 }

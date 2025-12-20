@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR" layout:decorate="~{layout/layoutpadrao}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org">
-<head><meta charset="UTF-8" /><title>Mostrar Consultas</title></head>
+<head>
+    <meta charset="UTF-8" />
+    <title>Mostrar Consultas</title>
+</head>
 <body>
     <main layout:fragment="conteudo" th:fragment="tabela" id="main" class="flex flex-col align-middle w-full m-10">
-        <h1 class="text-xl md:text-2xl">Consultas Agendadas</h1>
-        <h1 th:if="${pagina.vazia}" class="text-lg md:text-xl mt-5">Nenhuma consulta encontrada</h1>
+        <h1 class="text-xl md:text-2xl font-bold text-gray-800">Consultas Agendadas</h1>
+        
+        <div th:if="${notificacao != null}" th:object="${notificacao}">
+            <input type="hidden" id="mensagemSA2" th:value="*{mensagem}">
+            <input type="hidden" id="tipoSA2" th:value="*{tipo}">
+            <input type="hidden" id="intervaloSA2" th:value="*{intervalo}">
+        </div>
+
+        <h1 th:if="${pagina.vazia}" class="text-lg md:text-xl mt-5 text-gray-500">Nenhuma consulta encontrada</h1>
 
         <div th:if="${not pagina.vazia}" class="flex flex-col mt-5">
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto shadow-md rounded-xl">
                 <div class="min-w-full inline-block align-middle">
                     <div class="border rounded-xl overflow-hidden shadow">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead>
+                            <thead class="bg-gray-50">
                                 <tr>
                                     <th th:replace="~{layout/fragments/paginacao :: coluna(${pagina}, 'codigo', 'Cód.', '')}"></th>
                                     <th th:replace="~{layout/fragments/paginacao :: coluna(${pagina}, 'data', 'Data', '')}"></th>
@@ -53,19 +63,6 @@
                     </svg>
                 </a>
 
-<<<<<<< Updated upstream
-                                        <a th:if="${consulta.status.name() == 'FINALIZADO'}"
-                                            th:href="@{/consulta/{codigo}/atender(codigo=${consulta.codigo})}"
-                                            class="inline-flex items-center justify-center text-green-600 hover:text-green-900" title="Editar ou Ver Prontuário">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-=======
                 <form th:if="${consulta.status.name() == 'AGENDADO'}"
                     th:action="@{/consulta/{codigo}/cancelar(codigo=${consulta.codigo})}"
                     method="post"
@@ -104,7 +101,6 @@
         </td>
     </tr>
 </tbody>
->>>>>>> Stashed changes
                         </table>
                     </div>
                 </div>

@@ -19,7 +19,7 @@ public class StringToPacienteConverter implements Converter<String, Paciente> {
         if (!StringUtils.hasText(source)) {
             return null;
         }
-        // O segredo: converter o Texto (ID) para Número e buscar pelo ID
+
         try {
             Long id = Long.valueOf(source);
             return repository.findById(id).orElse(null);

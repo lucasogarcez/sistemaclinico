@@ -31,15 +31,6 @@ public class ConsultaService {
         if (inicio.isAfter(horario)) inicio = LocalTime.MIN; 
         if (fim.isBefore(horario)) fim = LocalTime.MAX;      
 
-<<<<<<< Updated upstream
-        // Verifica se existe agendamento para este médico, nesta hora, que NÃO esteja cancelado
-        boolean horarioOcupado = repository.existsByMedicoAndDataAndHorarioAndStatusNot(
-            consulta.getMedico(), 
-            consulta.getData(),
-            consulta.getHorario(), 
-            StatusConsulta.CANCELADO
-        );
-=======
         boolean horarioOcupado;
 
         if (consulta.getCodigo() == null) {
@@ -62,7 +53,6 @@ public class ConsultaService {
                 consulta.getCodigo()
             );
         }
->>>>>>> Stashed changes
 
         if (horarioOcupado) {
             throw new IllegalArgumentException("Conflito de horário. O médico precisa de um intervalo de 30 minutos entre consultas.");

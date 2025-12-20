@@ -3,16 +3,19 @@ package com.sistemaclinico.repository.queries.consulta;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository; // Adicionado
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
+
 import com.sistemaclinico.filter.ConsultaFilter;
 import com.sistemaclinico.model.Consulta;
 import com.sistemaclinico.pagination.PaginacaoUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 
 @Repository // Importante para o Spring achar essa classe
 public class ConsultaQueriesImpl implements ConsultaQueries {
