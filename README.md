@@ -4,7 +4,7 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen?logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue?logo=postgresql)
 ![License](https://img.shields.io/badge/License-Acadêmico-lightgrey)
-![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
+![Status](https://img.shields.io/badge/Status-Finalizado-green)
 
 ---
 
@@ -24,10 +24,9 @@
     - [**Etapa 5:**](#etapa-5)
     - [**Etapa 6:**](#etapa-6)
     - [**Etapa 7:**](#etapa-7)
-    - [**Etapa 8:**](#etapa-8)
   - [🧠 Modelagem (Diagrama de Classes)](#-modelagem-diagrama-de-classes)
     - [Entidades principais:](#entidades-principais)
-  - [🧭 Estrutura Esperada do Projeto](#-estrutura-esperada-do-projeto)
+  - [🧭 Estrutura do Projeto](#-estrutura-do-projeto)
   - [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
     - [1️⃣ **Clonar o repositório:**](#1️⃣-clonar-o-repositório)
     - [2️⃣ **Entrar na pasta do projeto:**](#2️⃣-entrar-na-pasta-do-projeto)
@@ -49,10 +48,9 @@
 ## 📖 Descrição do Projeto
 O **Sistema Clínico** tem como objetivo gerenciar informações de pacientes, médicos e consultas, oferecendo funcionalidades como:
 
-- Cadastro de pacientes, médicos e usuários do sistema;  
-- Controle de acesso por papéis (admin, funcionário e médico);  
+- Cadastro de pacientes e médicos;
 - Registro de consultas com dados clínicos (peso, altura, pressão arterial, temperatura, etc.);  
-- Emissão de relatórios em PDF contendo informações das consultas e laudo de conclusão.  
+- Emissão de relatórios em PDF contendo informações das consultas, laudo de conclusão e histórico de pacientes.  
 
 O sistema será desenvolvido de forma **orientada a objetos** e com **camadas bem definidas**, aplicando os conceitos vistos na disciplina.
 
@@ -65,8 +63,7 @@ O projeto visa colocar em prática os conceitos aprendidos em **Programação We
 - Implementação de **CRUDs completos**;  
 - Criação de **controllers, services, repositories e views**;  
 - Uso de **migrações com Flyway**;  
-- **Validação de dados** no backend;  
-- Implementação de **segurança e autenticação** (Spring Security);  
+- **Validação de dados** no backend; 
 - **Geração de relatórios em PDF** com sub-relatórios;  
 - Utilização de **padrões de projeto** e boas práticas de arquitetura (MVC, camadas, etc.);  
 - Implementação de **páginas de erro e paginação**.  
@@ -82,8 +79,7 @@ O projeto visa colocar em prática os conceitos aprendidos em **Programação We
 | **Banco de Dados** | PostgreSQL |
 | **Migrações** | Flyway |
 | **Frontend** | Thymeleaf, HTMX, TailwindCSS, HTML, CSS, JavaScript |
-| **Relatórios** | JasperReports (ou equivalente) |
-| **Segurança** | Spring Security com HTTPS |
+| **Relatórios** | JasperReports |
 
 ---
 
@@ -114,16 +110,11 @@ O projeto visa colocar em prática os conceitos aprendidos em **Programação We
 - Validação de dados e integração entre entidades.  
 
 ### **Etapa 6:**  
-**Segurança do Sistema**  
-- Implementação de login, controle de acesso e criptografia de senha.  
-- Definição de papéis: *Administrador*, *Funcionário* e *Médico*.  
-
-### **Etapa 7:**  
 **Relatório em PDF**  
 - Geração de relatório com sub-relatórios (ex.: consultas de um paciente).  
 - Exibição via interface web.  
 
-### **Etapa 8:**  
+### **Etapa 7:**  
 **Apresentação Final**  
 - Demonstração do sistema completo ao professor, mostrando:  
   - Classes do modelo  
@@ -145,42 +136,45 @@ O diagrama abaixo representa uma **visão simplificada do modelo do sistema**:
 - **Pacientes**
 - **Médicos**
 - **Consultas**
-- **Usuários**
-- **Papéis**
 
 **Relacionamentos:**
-- Um **usuário** pertence a um **papel** (ex.: médico, admin, funcionário);  
-- Um **médico** é vinculado a um **usuário**;  
 - Uma **consulta** está associada a um **paciente** e a um **médico**.  
 
 ---
 
-## 🧭 Estrutura Esperada do Projeto
+## 🧭 Estrutura do Projeto
 
 ```
-sistema-clinico/
+sistemaclinico/
 │
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── com/
 │   │   │       └── sistemaclinico/
-│   │   │           └── clinico/
-│   │   │               ├── controller/
-│   │   │               ├── service/
-│   │   │               ├── repository/
-│   │   │               ├── model/
-│   │   │               └── config/
+│   │   │           ├── aop/
+│   │   │           ├── controller/
+│   │   │           ├── filter/
+│   │   │           ├── formatter/
+│   │   │           ├── model/
+│   │   │           ├── notification/
+│   │   │           ├── pagination/
+│   │   │           ├── repository/
+│   │   │           ├── service/
+│   │   │           └── validation/
 │   │   └── resources/
-│   │       ├── templates/        # Views Thymeleaf
-│   │       ├── static/           # CSS, JS e imagens
-│   │       └── db/
-│   │           └── migration/    # Scripts Flyway
+│   │       ├── templates/                # Views Thymeleaf
+│   │       ├── relatorios/               # Relatórios Jaspersoft
+│   │       ├── static/                   # CSS, JS e imagens
+│   │       ├── db/
+│   │       │    └── migration/            # Scripts Flyway
+│   │       ├── application.properties/   # Configurações do Spring
+│   │       └── formatadores.properties   # Configurações dos formatadores
 │   └── test/
 │
-├── pom.xml                       # Dependências Maven
-├── README.md                     # Documentação do projeto
-└── .gitignore                    # Arquivos ignorados pelo Git
+├── pom.xml                               # Dependências Maven
+├── README.md                             # Documentação do projeto
+└── .gitignore                            # Arquivos ignorados pelo Git
 ```
 
 ---
@@ -188,12 +182,12 @@ sistema-clinico/
 ## 🚀 Como Executar o Projeto
 ### 1️⃣ **Clonar o repositório:**
   ```bash
-  git clone https://github.com/seuusuario/sistema-clinico.git
+  git clone https://github.com/seuusuario/sistemaclinico.git
   ```
 
 ### 2️⃣ **Entrar na pasta do projeto:**
   ```bash
-  cd sistema-clinico
+  cd sistemaclinico
   ```
 
 ### 3️⃣ **Configurar o banco de dados:**
