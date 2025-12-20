@@ -22,6 +22,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+
 
 @Entity
 @Table(name = "paciente")
@@ -35,6 +37,7 @@ public class Paciente implements Serializable {
     private Long codigo;
 
     @NotBlank(message = "O nome do paciente é obrigatório")
+    @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "O nome deve conter apenas letras")
     private String nome;
 
     @NotBlank(message = "O CPF do paciente é obrigatório")
@@ -50,7 +53,6 @@ public class Paciente implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusPessoa status = StatusPessoa.ATIVO;
 
-    // CORREÇÃO: Adicionado JsonIgnore e OneToMany
     @JsonIgnore
     @OneToMany(mappedBy = "paciente")
     private List<Consulta> consultas;

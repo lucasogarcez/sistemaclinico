@@ -6,6 +6,7 @@
         <h1 class="text-xl md:text-2xl">Pesquisar Consultas</h1>
         
         <form th:hx-get="@{/consulta/pesquisar}" th:object="${consultaFilter}" class="mt-10 w-full md:w-1/2 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <input type="hidden" name="destino" th:value="${destino}" />
             <div class="flex gap-x-6">
                  <div class="flex-1">
                     <div th:replace="~{layout/fragments/forms :: inputSimples('Data da Consulta', 'data', 'data')}"></div>

@@ -25,6 +25,11 @@ public class ControllerHtmxReturnAspect {
         String headerHtmx = request.getHeader("HX-Request");
         Object result = joinPoint.proceed();
         String retorno = getReturnString(result);
+
+        if (retorno == null) {
+            return result;
+        }
+
         if (headerHtmx == null) {
             int posicao = retorno.indexOf("::");
             if (posicao != -1) {

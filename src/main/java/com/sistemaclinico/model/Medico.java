@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "medico")
@@ -28,7 +29,9 @@ public class Medico implements Serializable {
     @GeneratedValue(generator="gerador4", strategy=GenerationType.SEQUENCE)
     private Long codigo;
 
+
     @NotBlank(message = "O nome do médico é obrigatório")
+    @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "O nome deve conter apenas letras")
     private String nome;
 
     @NotBlank(message = "A CRM do médico é obrigatório")
@@ -37,7 +40,6 @@ public class Medico implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusPessoa status = StatusPessoa.ATIVO;
 
-    // CORREÇÃO: Adicionado JsonIgnore e OneToMany
     @JsonIgnore
     @OneToMany(mappedBy = "medico")
     private List<Consulta> consultas;

@@ -42,8 +42,8 @@
       <button th:replace="~{layout/fragments/menu-item-button :: menu-item-button('Relatórios', ~{::#relatorios-icon})}"></button>
 
       <div x-show="open" class="space-y-4 ps-10">
-        <div th:replace="~{layout/fragments/menu-item-option :: menu-item-option('Histórico Médico', '/', ~{::#pdf-icon})}"></div>
-        <div th:replace="~{layout/fragments/menu-item-option :: menu-item-option('Laudos', '/', ~{::#pdf-icon})}"></div>
+        <div th:replace="~{layout/fragments/menu-item-option :: menu-item-option('Histórico Médico', @{/paciente/abrirpesquisa(destino='historico')}, ~{::#pdf-icon})}"></div>
+        <div th:replace="~{layout/fragments/menu-item-option :: menu-item-option('Laudos', @{/consulta/abrirpesquisa(destino='laudo')}, ~{::#pdf-icon})}"></div>
       </div>
     </div>
 

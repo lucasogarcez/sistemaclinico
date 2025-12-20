@@ -1,5 +1,7 @@
 package com.sistemaclinico.service;
 
+import java.time.LocalTime; // Importante adicionar
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +23,15 @@ public class ConsultaService {
         if (consulta.getCodigo() == null) {
             consulta.setStatus(StatusConsulta.AGENDADO);
         }
+        
+        LocalTime horario = consulta.getHorario();
+        LocalTime inicio = horario.minusMinutes(29);
+        LocalTime fim = horario.plusMinutes(29);
 
+        if (inicio.isAfter(horario)) inicio = LocalTime.MIN; 
+        if (fim.isBefore(horario)) fim = LocalTime.MAX;      
+
+<<<<<<< Updated upstream
         // Verifica se existe agendamento para este médico, nesta hora, que NÃO esteja cancelado
         boolean horarioOcupado = repository.existsByMedicoAndDataAndHorarioAndStatusNot(
             consulta.getMedico(), 
@@ -29,15 +39,38 @@ public class ConsultaService {
             consulta.getHorario(), 
             StatusConsulta.CANCELADO
         );
+=======
+        boolean horarioOcupado;
+
+        if (consulta.getCodigo() == null) {
+
+            horarioOcupado = repository.existsByMedicoAndDataAndStatusNotAndHorarioBetween(
+                consulta.getMedico(), 
+                consulta.getData(),
+                StatusConsulta.CANCELADO, 
+                inicio,
+                fim
+            );
+        } else {
+
+            horarioOcupado = repository.existsByMedicoAndDataAndStatusNotAndHorarioBetweenAndCodigoNot(
+                consulta.getMedico(), 
+                consulta.getData(),
+                StatusConsulta.CANCELADO, 
+                inicio,
+                fim,
+                consulta.getCodigo()
+            );
+        }
+>>>>>>> Stashed changes
 
         if (horarioOcupado) {
-            throw new IllegalArgumentException("Este médico já possui agendamento neste horário.");
+            throw new IllegalArgumentException("Conflito de horário. O médico precisa de um intervalo de 30 minutos entre consultas.");
         }
 
         repository.save(consulta);
     }
 
-    // Busca para preencher a tela de atendimento
     public Consulta buscarPorCodigo(Long codigo) {
         return repository.findById(codigo)
             .orElseThrow(() -> new IllegalArgumentException("Consulta não encontrada"));

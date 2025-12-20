@@ -2,19 +2,27 @@ package com.sistemaclinico.controller;
 
 import java.util.Optional;
 
+<<<<<<< Updated upstream
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+=======
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> Stashed changes
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sistemaclinico.filter.PacienteFilter;
@@ -25,8 +33,13 @@ import com.sistemaclinico.notification.TipoNotificaoSweetAlert2;
 import com.sistemaclinico.pagination.PageWrapper;
 import com.sistemaclinico.repository.PacienteRepository;
 import com.sistemaclinico.service.PacienteService;
+import com.sistemaclinico.service.RelatorioService;
 
 import jakarta.servlet.http.HttpServletRequest;
+<<<<<<< Updated upstream
+=======
+import jakarta.servlet.http.HttpServletResponse;
+>>>>>>> Stashed changes
 import jakarta.validation.Valid;
 
 @Controller
@@ -37,23 +50,38 @@ public class PacienteController {
     private PacienteRepository repository;
     private PacienteService service;
 
+    @Autowired
+    private RelatorioService relatorioService;
+
     public PacienteController(PacienteRepository repository, PacienteService service) {
         this.repository = repository;
         this.service = service;
     }
 
     @GetMapping("/paciente/abrirpesquisa")
-    public String abrirPesquisa() {
+    public String abrirPesquisa(@RequestParam(required = false) String destino, Model model) {
+        model.addAttribute("destino", destino);
         return "paciente/pesquisar :: formulario";
     }
 
     @GetMapping("/paciente/pesquisar")
-    public String pesquisar(PacienteFilter filtro, Model model,
+    public String pesquisar(PacienteFilter filtro, @RequestParam(required = false) String destino, Model model,
             @PageableDefault(size = 7) @SortDefault(sort = "codigo", direction = Sort.Direction.ASC) Pageable pageable,
             HttpServletRequest request) {
+
         Page<Paciente> pagina = repository.pesquisar(filtro, pageable);
+
+        if ("historico".equals(destino) && pagina.getTotalElements() == 1) {
+            Long codigoUnico = pagina.getContent().get(0).getCodigo();
+            // Redireciona direto para o endpoint que gera o PDF
+            return "redirect:/paciente/" + codigoUnico + "/historico-pdf";
+        }
+
         PageWrapper<Paciente> paginaWrapper = new PageWrapper<>(pagina, request);
+
         model.addAttribute("pagina", paginaWrapper);
+        model.addAttribute("destino", destino);
+
         return "paciente/mostrar :: tabela";
     }
 
@@ -107,5 +135,16 @@ public class PacienteController {
             return "redirect:/paciente/abrirpesquisa";
         }
         return "mensagem :: texto";
+    }
+
+    @GetMapping("/paciente/{codigo}/historico-pdf")
+    public ResponseEntity<byte[]> baixarHistorico(@PathVariable("codigo") Long codigo) {
+        
+        byte[] relatorio = relatorioService.gerarHistoricoPaciente(codigo);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=historico_paciente_" + codigo + ".pdf")
+                .body(relatorio);
     }
 }

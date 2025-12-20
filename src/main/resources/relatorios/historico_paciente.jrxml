@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="historico_paciente" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aff7f7a7-af7e-4d4d-91c8-217ed7156ee4">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SistemaClinico"/>
+	<style name="Style1" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></conditionExpression>
+			<style mode="Opaque" backcolor="#D9D9D9"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="ID_PACIENTE" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+    p.nome AS nome_paciente,
+    p.cpf AS cpf_paciente,
+    p.data_nascimento,
+    CAST(EXTRACT(YEAR FROM AGE(p.data_nascimento)) AS INTEGER) as idade_paciente,
+    c.data AS data_consulta,
+    c.horario,
+    c.status,
+    c.desfecho,
+    m.nome AS nome_medico
+FROM paciente p 
+LEFT JOIN consulta c ON c.codigo_paciente = p.codigo
+LEFT JOIN medico m ON c.codigo_medico = m.codigo
+WHERE p.codigo = $P{ID_PACIENTE}
+ORDER BY c.data DESC, c.horario DESC]]>
+	</queryString>
+	<field name="nome_paciente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome_paciente"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_paciente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<field name="cpf_paciente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cpf_paciente"/>
+		<property name="com.jaspersoft.studio.field.label" value="cpf_paciente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<field name="data_nascimento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="data_nascimento"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_nascimento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<field name="idade_paciente" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="idade_paciente"/>
+		<property name="com.jaspersoft.studio.field.label" value="idade_paciente"/>
+	</field>
+	<field name="data_consulta" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="data_consulta"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_consulta"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
+	</field>
+	<field name="horario" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="horario"/>
+		<property name="com.jaspersoft.studio.field.label" value="horario"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
+	</field>
+	<field name="status" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="status"/>
+		<property name="com.jaspersoft.studio.field.label" value="status"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
+	</field>
+	<field name="desfecho" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="desfecho"/>
+		<property name="com.jaspersoft.studio.field.label" value="desfecho"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
+	</field>
+	<field name="nome_medico" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome_medico"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_medico"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="medico"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="180" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="80" width="560" height="100" uuid="c43ac85d-b5b5-4094-973f-bec550f45f49"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="102" y="20" width="350" height="39" uuid="162f31f5-b986-4892-850d-1ab9ec2c680a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[HISTÓRICO CLÍNICO DO PACIENTE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="120" width="135" height="30" uuid="54a0af11-af1d-4039-b9e3-dfd3bbc86081"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cpf_paciente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="90" width="135" height="30" uuid="bba6f773-b4bd-4669-b691-ca477cf8c681"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_paciente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="90" width="48" height="30" uuid="70c77a9d-5281-46d4-b755-b2aae73aaddf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="120" width="48" height="30" uuid="acf61928-7498-46a1-87c3-7f26a42de9a4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="150" width="48" height="30" uuid="a8e98b4a-fb21-487c-8ac9-a600eb80ac42"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Idade:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="150" width="134" height="30" uuid="38797ae1-acfb-4774-bf00-1cec76c6eda5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idade_paciente} + " anos"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="2" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="70" y="15" width="62" height="30" backcolor="#595757" uuid="9a9fe8da-a0e4-461e-8d65-a22cad236761"/>
+				<box padding="0">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="132" y="15" width="48" height="30" backcolor="#595757" uuid="1067b508-67e1-45dc-acb4-284e2ef8cefa"/>
+				<box padding="0">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[HORA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="15" width="138" height="30" backcolor="#595757" uuid="5a156317-8e51-4cdc-8083-6bc5c7ddb6ba"/>
+				<box padding="0">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[MÉDICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="15" width="70" height="30" backcolor="#595757" uuid="c57a3aca-c4c7-492c-96ae-75fcb4ee9a05"/>
+				<box padding="0">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="388" y="15" width="72" height="30" backcolor="#595757" uuid="82b7e922-68d5-44da-8d0e-b72d31e6226e"/>
+				<box padding="0">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DESFECHO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="Style1" x="180" y="0" width="138" height="30" uuid="07e299e3-e597-4552-80c9-35509f5ce251"/>
+				<box padding="1">
+					<pen lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome_medico}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Style1" x="388" y="0" width="72" height="30" uuid="3917dae2-ad0c-478a-a899-6b8426c2979c"/>
+				<box padding="1">
+					<pen lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{desfecho}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Style1" x="318" y="0" width="70" height="30" uuid="7236ea81-1246-4d56-b0f0-3a60fbd8e4d6"/>
+				<box padding="1">
+					<pen lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement style="Style1" x="70" y="0" width="62" height="30" uuid="625582d6-a001-45f6-a3ff-bbab286fab1a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e9432aa6-b33a-4470-aa45-8a1b3b6bd81f"/>
+				</reportElement>
+				<box padding="1">
+					<pen lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{data_consulta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm" isBlankWhenNull="true">
+				<reportElement style="Style1" x="132" y="0" width="48" height="30" uuid="fd696d6e-2739-4ea8-afe7-3630f0588dee"/>
+				<box padding="1">
+					<pen lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{horario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="452" y="50" width="107" height="30" uuid="3106c4f0-a868-480f-b1e2-3c2168a02e8a"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="50" width="100" height="30" uuid="42e93b68-1c0c-4fa8-b31b-d9e66e153d41"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
